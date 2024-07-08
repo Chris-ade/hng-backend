@@ -57,6 +57,7 @@ class Organization(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     users = models.ManyToManyField(User, related_name='organizations')
+    created_by = models.ForeignKey(User, related_name='created_organizations', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
