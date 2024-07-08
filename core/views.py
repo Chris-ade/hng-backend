@@ -62,7 +62,7 @@ class RegisterView(APIView):
 
             org_name = f"{user.firstName}'s Organisation"
             org_desc = f"{user.firstName}'s organisation description"
-            org = Organization.objects.create(orgId=user.userId, name=org_name, description=org_desc)
+            org = Organization.objects.create(created_by=user, name=org_name, description=org_desc)
             org.users.add(user)
             org.save()
 
@@ -160,11 +160,12 @@ class UserOrganizationsView(APIView):
                 "organisations": OrganizationSerializer(organisations, many=True).data
             }
         }, status=status.HTTP_200_OK)
-        
+    
     def post(self, request):
         serializer = OrganizationSerializer(data=request.data)
         if serializer.is_valid():
-            organization = serializer.save()
+            # Manually set the created_by field to the request user
+            organization = serializer.save(created_by=request.user)
             organization.users.add(request.user)
             organization.save()
 
@@ -206,15 +207,28 @@ class AddUserToOrganizationView(APIView):
         organization = Organization.objects.filter(orgId=orgId).first()
         user = User.objects.filter(userId=userId).first()
 
-        if not organization or not user:
+        if not organization:
             return Response({
                 "status": "Bad request",
-                "message": "Organization or User not found",
+                "message": "Organisation not found",
+                "statusCode": 400
+            }, status=status.HTTP_400_BAD_REQUEST)
+        elif not user:
+            return Response({
+                "status": "Bad request",
+                "message": "User doesn't exist",
                 "statusCode": 400
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        organization.users.add(user)
-        organization.save()
+        if organization and user in organization.users.all():
+            return Response({
+                "status": "Bad request",
+                "message": "User is already in this organisation.",
+                "statusCode": 400
+            }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            organization.users.add(user)
+            organization.save()
 
         return Response({
             "status": "success",

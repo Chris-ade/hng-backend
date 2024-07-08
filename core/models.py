@@ -32,7 +32,7 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser):
-    userId = models.CharField(max_length=255, unique=True)
+    userId = models.AutoField(primary_key=True, unique=True)
     firstName = models.CharField(max_length=255)
     lastName = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
@@ -43,7 +43,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['userId', 'firstName', 'lastName']
+    REQUIRED_FIELDS = ['firstName', 'lastName', 'phone']
 
     def __str__(self):
         return self.email

@@ -83,20 +83,20 @@ AUTHENTICATION_BACKENDS = [
 # Note: Django modules for using databases are not support in serverless
 # environments like Vercel. You can use a database over HTTP, hosted elsewhere.
 
-# DATABASES = {
+#DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.sqlite3',
 #        'NAME': BASE_DIR / 'db.sqlite3',
 #    }
-# }
+#}
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'verceldb',
         'USER': 'default',
-        'PASSWORD': '3YwWFvszV9nR',
-        'HOST': 'ep-long-glade-a4sx6cob-pooler.us-east-1.aws.neon.tech',
+        'PASSWORD': 'JpZ1IkmF3tjh',
+        'HOST': 'ep-delicate-dust-a46kwhum-pooler.us-east-1.aws.neon.tech',
         'PORT': '5432',
     }
 }

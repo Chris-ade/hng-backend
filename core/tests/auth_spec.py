@@ -7,7 +7,6 @@ class AuthTests(APITestCase):
     def test_register_user_successfully(self):
         url = reverse('register')
         data = {
-            "userId": 1,
             "firstName": "John",
             "lastName": "Doe",
             "email": "john.doe@example.com",
@@ -23,7 +22,6 @@ class AuthTests(APITestCase):
     def test_register_user_missing_fields(self):
         url = reverse('register')
         data = {
-            "userId": 1,
             "lastName": "Doe",
             "email": "john.doe@example.com",
             "password": "password123",
@@ -36,7 +34,6 @@ class AuthTests(APITestCase):
     def test_register_user_duplicate_email(self):
         url = reverse('register')
         data = {
-            "userId": 1,
             "firstName": "John",
             "lastName": "Doe",
             "email": "john.doe@example.com",
@@ -53,7 +50,6 @@ class AuthTests(APITestCase):
         register_url = reverse('register')
         login_url = reverse('login')
         data = {
-            "userId": 1,
             "firstName": "John",
             "lastName": "Doe",
             "email": "john.doe@example.com",
@@ -70,7 +66,6 @@ class AuthTests(APITestCase):
         register_url = reverse('register')
         login_url = reverse('login')
         data = {
-            "userId": 1,
             "firstName": "John",
             "lastName": "Doe",
             "email": "john.doe@example.com",
