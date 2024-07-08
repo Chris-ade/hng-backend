@@ -112,12 +112,26 @@ class UserView(APIView):
 
     def get(self, request, id):
         user = User.objects.filter(userId=id).first()
-        if user and (user == request.user or user in request.user.organizations.all().users):
-            return Response({
-                "status": "success",
-                "message": "User details fetched successfully",
-                "data": UserSerializer(user).data
-            }, status=status.HTTP_200_OK)
+        if user:
+            # Check if the user is the logged-in user
+            if user == request.user:
+                return Response({
+                    "status": "success",
+                    "message": "User details fetched successfully",
+                    "data": UserSerializer(user).data
+                }, status=status.HTTP_200_OK)
+            
+            # Check if the user belongs to any of the logged-in user's organizations
+            user_in_organizations = any(
+                user in org.users.all() for org in request.user.organizations.all()
+            )
+            if user_in_organizations:
+                return Response({
+                    "status": "success",
+                    "message": "User details fetched successfully",
+                    "data": UserSerializer(user).data
+                }, status=status.HTTP_200_OK)
+
         return Response({
             "status": "Bad request",
             "message": "User not found or access denied",
